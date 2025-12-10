@@ -1,0 +1,14 @@
+=== PDF Processing Debug Log ===
+File: C:\NFL\documents\try1.pdf
+Size: 17584 bytes
+
+
+=== Page 1 ===
+Utkarsh Jha visited Thail and in 2016
+
+Structured content found:
+- Utkarsh Jha visited Thail and in 2016...
+
+=== Summary ===
+Total text extracted: 39 characters
+Content blocks: 1

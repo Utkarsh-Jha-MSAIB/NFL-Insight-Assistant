@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFL Insight Assistant</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>NFL Insight Assistant</h2>
+            <button id="clear-button" class="button">Clear Chat</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Initial message will be added by JavaScript -->
+        </div>
+        <div class="call-buttons" id="call-buttons" style="display: none;">
+            <button class="call-button yes-button" onclick="handleCallResponse('yes, schedule a call')">Yes, Schedule a Call</button>
+            <button class="call-button no-button" onclick="handleCallResponse('no, ignore this message')">No, Continue Chat</button>
+        </div>
+        <div class="button-container" id="button-container" style="display: none;">
+            <div class="button-row" id="initial-buttons">
+                <button class="option-button" onclick="sendMessage('Tell me about Team-Level Behavior Report')">TEAM REPORT</button>
+                <button class="option-button" onclick="sendMessage('Share me a Player-Level Behavior Summary')">PLAYER SUMMARY</button>
+                <button class="option-button" onclick="sendMessage('Tell me about Quarterback Behavior Summary')">QUARTERBACK SUMMARY</button>
+            </div>
+            <button class="more-button" onclick="toggleMoreOptions()">More Options</button>
+            <div class="button-row" id="more-buttons" style="display: none;">
+                <button class="option-button" onclick="sendMessage('Tell me about Routing Tendicies by Top Pass Target')">ROUTING TENDENCIES</button>
+                <button class="option-button" onclick="sendMessage('Tell me about Average Depth of Target (aDOT) per receiver')">aDOT</button>
+                <button class="option-button" onclick="sendMessage('Tell me about Contact Us')">CONTACT US</button>
+            </div>
+        </div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <style>
+        .call-buttons {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        
+        .call-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .yes-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .no-button {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .call-button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+    </style>
+
+    <script>
+        let chatHistory = [];
+        let currentSessionId = null;
+        let isFirstMessage = true;
+
+        function toggleMoreOptions() {
+            const moreButtons = document.getElementById('more-buttons');
+            const moreButton = document.querySelector('.more-button');
+            if (moreButtons.style.display === 'none') {
+                moreButtons.style.display = 'flex';
+                moreButton.textContent = 'Show Less';
+            } else {
+                moreButtons.style.display = 'none';
+                moreButton.textContent = 'More Options';
+            }
+        }
+
+        function showButtons() {
+            const buttonContainer = document.getElementById('button-container');
+            buttonContainer.style.display = 'flex';
+            setTimeout(() => {
+                buttonContainer.classList.add('visible');
+            }, 100);
+        }
+
+        function addMessage(content, isUser = false) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = content;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function handleCallResponse(response) {
+            sendMessage(response);
+            const callButtons = document.getElementById('call-buttons');
+            callButtons.style.display = 'none';
+        }
+
+        function sendMessage(buttonText = null) {
+            const input = document.getElementById('user-input');
+            const message = buttonText || input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage(message, true);
+            input.value = '';
+            
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    session_id: currentSessionId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.session_id) {
+                    currentSessionId = data.session_id;
+                }
+                if (data.response) {
+                    addMessage(data.response);
+                    
+                    // Show call buttons if needed
+                    const callButtons = document.getElementById('call-buttons');
+                    if (data.show_call_buttons) {
+                        callButtons.style.display = 'flex';
+                    } else {
+                        callButtons.style.display = 'none';
+                    }
+                    
+                    // Show buttons after first response
+                    if (isFirstMessage) {
+                        isFirstMessage = false;
+                        setTimeout(showButtons, 1000);
+                    }
+                } else if (data.error) {
+                    addMessage("I apologize, but I encountered an error. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                addMessage('Sorry, there was an error processing your message.');
+            });
+        }
+
+        // Handle Enter key
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Add initial welcome message
+        window.onload = function() {
+            addMessage("Hello! I'm your NFL Insights Assistant. How can I help you today?");
+        };
+
+        async function clearChat() {
+            try {
+                await fetch('/clear_history', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: currentSessionId })
+                });
+
+                chatHistory = [];
+                currentSessionId = null;
+                isFirstMessage = true;
+                
+                const chatMessages = document.getElementById('chat-messages');
+                chatMessages.innerHTML = '';
+                addMessage("Hello! I'm your NFL Insights Assistant. How can I help you today?");
+                
+                const buttonContainer = document.getElementById('button-container');
+                buttonContainer.style.display = 'none';
+                buttonContainer.classList.remove('visible');
+                
+                const moreButtons = document.getElementById('more-buttons');
+                moreButtons.style.display = 'none';
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('Error clearing chat history.', false);
+            }
+        }
+
+        const clearButton = document.getElementById('clear-button');
+        clearButton.addEventListener('click', clearChat);
+    </script>
+</body>
+</html> 
