@@ -2,7 +2,7 @@
 
 An interactive Generative AI system for **tactical NFL scouting**, designed to help coaches, analysts, scouts, and players quickly extract opponent tendencies from structured play-by-play data using natural language queries.
 
-<p align="left">
+<p align="center">
   <img src="https://github.com/user-attachments/assets/d6e1cebc-28d5-4a55-9b71-ae5820995f80" width="500" alt="My image"/>
  <sub><i> Landing page of our NFL Chatbot</a> </i></sub>
 </p>
