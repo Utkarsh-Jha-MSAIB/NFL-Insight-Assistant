@@ -46,7 +46,17 @@ All answers are derived **only from provided game data**.
 
 ---
 
+## Advanced System Features
 
+| Capability | Description |
+|----------|------------|
+| Dynamic RAG Chunking | Play-by-play data is chunked at multiple granularities (play, drive, quarter). This allows the system to adapt retrieval scope based on question intent, improving answer structure and relevance. |
+| Chain-of-Thought Reasoning | Explicit football-specific reasoning steps (down, distance, player role, outcome) improve transparency and reduce shallow pattern matching. |
+| Chat Log Extraction | All user queries and model responses are logged and exportable for offline review, auditability, and iterative prompt optimization. |
+| Calendar Integration | Supports scheduling scouting reviews and follow-up analysis sessions directly from the assistant interface, enabling smoother analyst workflows. |
+| Context-Aware Prompting | Prompts dynamically adjust emphasis (team-level vs player-level) based on detected query intent, reducing irrelevant output. |
+
+---
 ## Future Work
 
 | Direction | Description |
