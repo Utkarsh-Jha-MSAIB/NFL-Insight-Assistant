@@ -2,6 +2,9 @@
 
 An interactive Generative AI system for **tactical NFL scouting**, designed to help coaches, analysts, scouts, and players quickly extract opponent tendencies from structured play-by-play data using natural language queries.
 
+Traditional football analytics rely on manual film study and custom scripts, which are time-intensive and require technical expertise.  
+The **NFL Insight Assistant** accelerates this process by converting structured play-by-play data into **clear, tactical summaries** using Retrieval-Augmented Generation (RAG) and football-specific reasoning.
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/d6e1cebc-28d5-4a55-9b71-ae5820995f80" width="500" alt="My image"/>
  <sub><i> Landing page of our NFL Chatbot</a> </i></sub>
@@ -9,14 +12,7 @@ An interactive Generative AI system for **tactical NFL scouting**, designed to h
 
 ---
 
-## 🎯 Purpose
-
-Traditional football analytics rely on manual film study and custom scripts, which are time-intensive and require technical expertise.  
-The **NFL Insight Assistant** accelerates this process by converting structured play-by-play data into **clear, tactical summaries** using Retrieval-Augmented Generation (RAG) and football-specific reasoning.
-
----
-
-## 🧠 System Overview
+## System Overview
 
 | Component | Description |
 |--------|------------|
@@ -28,7 +24,7 @@ The **NFL Insight Assistant** accelerates this process by converting structured 
 
 ---
 
-## ⚙️ How It Works
+## How It Works
 
 1. Play-by-play data is converted into readable RAG chunks  
 2. Users ask natural-language football questions  
@@ -39,7 +35,7 @@ All answers are derived **only from provided game data**.
 
 ---
 
-## 📊 Evaluation Summary
+## Evaluation Summary
 
 | Criteria | Observation |
 |-------|------------|
@@ -50,26 +46,8 @@ All answers are derived **only from provided game data**.
 
 ---
 
-## 🏟️ Use Cases
 
-| Role | Example Usage |
-|----|--------------|
-| Coaches | Review opponent tendencies before film sessions |
-| Scouts | Generate quick team and player summaries |
-| Analysts | Rapid exploratory analysis before deep dives |
-| Players | Recall red-zone or down-specific tendencies |
-
----
-
-## ⚠️ Limitations
-
-- May miss rare events or exact counts  
-- Relies only on play-by-play data (no tracking or alignment info)  
-- Team-level insights can change due to injuries and roster movement  
-
----
-
-## 🚀 Future Work
+## Future Work
 
 | Direction | Description |
 |--------|------------|
@@ -78,9 +56,8 @@ All answers are derived **only from provided game data**.
 | Hybrid Analytics | LLM front-end calling deterministic functions |
 | Real-Time Use | Integration with live or near-live game feeds |
 
----
 
-## 🧾 Conclusion
+## Conclusion
 
 The **NFL Insight Assistant** shows that Generative AI, when grounded in structured football data, can meaningfully support game preparation.  
 Rather than replacing traditional analytics, it serves as a **fast, accessible scouting companion**, helping teams explore tendencies and validate insights more efficiently.
